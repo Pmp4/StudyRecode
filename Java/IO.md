@@ -8,7 +8,15 @@ Data Source => InputStream => Java Programme => OutputStream => 목적지
 
 ## 🛤 Stream
 ### 종류
-- 데이터에 따른 구분
+- <b>데이터</b>에 따른 구분
+  - Byte : InputStream/OutputStream
+  - 문자 : Reader/Writer
+- <b>역할</b>에 따른 구분
+  - NodeStream : 데이터 리소스와 직접적으로 연결되는 스트림
+  - FilterStream : NodeStream에 연결되어 보조하는 역할을 하는 스트림
+
+### 바이트기반 스트림
+> InputStream, OutputStream
 
 
 직렬화
