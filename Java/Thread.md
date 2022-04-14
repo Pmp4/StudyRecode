@@ -87,4 +87,13 @@ setDaemon(boolean on)
 ```
 쓰레드에 해당 메서드를 사용하여 데몬 쓰레드의 여부를 설정한다. setDaemon()은 반드시 해당 쓰레드의 실행 전(start())에 호출해야한다. 
 
-### Life Cycle
+## Life Cycle
+|상태|설명|
+|:------|:---|
+|NEW|쓰레드가 생성되고, 아직 start()가 호출되지 않은 상태|
+|RUNNABLE|실행 중 또는 실행 가능 상태|
+|BLOCKED|동기화블럭에 의해 일시정지|
+|WAITING, TIMED_WAITING|테스트2|
+|TERMINATED|쓰레드 작업 종료|
+
+### 
