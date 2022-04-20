@@ -21,7 +21,7 @@ Java에서 네트워크 데이터 통신을 위해 <b>'java.net'</b> 패키지�
 - TCP : 패킷을 받았다는 확인을 전송하고, 잃어버린 패킷에 대해서는 재전송을 요구한다. 따라서 상당한 양의 오버헤드를 동반. (HTTP, FTP 등)
 - UDP : 데이터가 목적지에 정확히 도착했는지, 또는 보내진 순서대로 도착했는지를 전혀 보장해주지 않는 신뢰성없는 프로토콜 (SMTP 등)
 - Port : 컴퓨터 내의 서버 프로그램들을 구별하기 위한 번호. 물리적인 포트(직렬포트, 병렬포트 등)를 말하는것은 아니다.
-- Socket : 서버와 클라이언트의 연결점
+- Socket : 프로세스간의 통신에 사용되는 양쪽 끝단, 서버와 클라이언트의 연결점
 - LoopBack : 패킷을 던졌을 때 자기 자신에게 돌아오는 주소. (자신의 주소를 말하며, 외부에 공개된 나의 주소와는 구별되어있는 공통된 주소)
 
 ### 통신의 3대 요소
@@ -88,11 +88,44 @@ public class InetAddressTest {
 
 자바에서 URL을 다루기 위한 클래스로 URL클래스를 제공한다.
 |메서드|설명|
-|||
+|---|---|
+|URL(String spes)|지정된 문자열 정보의 URL객체를 생성|
+|URL(String protocol, String host, String file)|지정된 값으로 구성된 URL객체를 생성|
+|URL(String protocol, String host, int port, String file)|지정된 값으로 구성된 URL객체를 생성|
+|String <b>getAuthority()</b>|호스트명과 포트를 문자열로 리턴|
+|Object <b>getContent()</b>|URL의 Content 객체를 리턴|
+|Object <b>getContent(Class[] classes)</b>|URL의 Content 객체를 리턴|
+|int <b>getDefaultPort()</b>|URL의 기본포트를 반환한다.(http는 80)|
+|String <b>getFile()</b>|파일명 리턴|
+|String <b>getHost()</b>|호스트명 리턴|
+|String <b>getPath()</b>|경로명 리턴|
+|int <b>getPort()</b>|포트 리턴|
+|String <b>getProtocol()</b>|프로토콜 리턴|
+|String <b>getQuery()</b>|쿼리 리턴|
+|String <b>getRef()</b>|참조(anchor) 리턴
+|String <b>getUserInfo()</b>|사용자정보 리턴|
+|URLConnection <b>openConnection()</b>|URL과 연결된 URLConnection을 얻는다|
+|URLConnection <b>openConnection(Proxy proxy)</b>|URL과 URLConnection을 얻는다|
+|InputStream <b>openStream()</b>|URL과  연결된  URLConnection의  InputStream을  얻는다.|
+|boolean <b>sameFile(URL other)</b>|두  URL이  서로  같은  것인지  알려준다|
+|protected  void <b>set(String protocol, String host, int port, String file, String ref)</b>|URL객체의  속성을  지정된  값으로  설정한다|
+|protected  void <b>set(String protocol, String host, int port, String authority, String userInfo, String path, String query, String ref)</b>|URL객체의  속성을  지정된  값으로  설정한다|
+|String <b>toExternalForm()</b>|URL을  문자열로  변환하여  반환한다|
+|URI <b>toURI()</b>|URL을  URI로  변환하여  반환한다|
+<!--```java
+URL url = new URL("http://naver.com");  //URL객체 생성
+System.out.println("Protocol:"+ url.getProtocol());
+System.out.println("Host:"+ url.getHost());
+System.out.println("Port:"+ url.getPort()); //-1 반환  => 기본  포트  사용한  경우
+System.out.println("File:"+ url.getFile());
+
+URLConnection conn = url.openConnection();
+//System.out.println("conn.toString():"+conn);
+System.out.println("\n\n파일  크기:" + conn.getContentLength()); System.out.println("ContentType:" + conn.getContentType());
+```-->
 
 ## 🏛 소켓 프로그래밍
-소켓을 이용한 통신 프로그래밍
-> 소켓(socket) - 프로세스간의 통신에 사용되는 양쪽 끝단, 서버와 클라이언트의 연결점
+[소켓](#주요용어)을 이용한 통신 프로그래밍
 
 소켓 프로그래밍에는 TCP통신, UDP통신으로 두가지 통신방식이 있다.
 
