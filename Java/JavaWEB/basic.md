@@ -116,7 +116,8 @@ public class 서블릿이름 extends HttpServlet {
 
 ##### 4. JSP Directive(지시어)
 ```<%@ directive %>```
-> JSP
+> JSP문서 전체에 영향을 준다.<br>
+> 지시어에 들어가는 것 : ```page``` ```include``` ```taglib```
 
 
 
