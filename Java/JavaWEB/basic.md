@@ -65,7 +65,9 @@
 자바언어를 개발한 Sun Microsystems(현 Oracle)에서 웹 개발을 위해 만든 표준<br>
 서블릿을 만들기 위해서는 자바코드를 작성하고, 코드를 컴파일해서 클래스 파일을 만들게 된다.
 ```java
-@WebServlet("/서블릿 경로명")
-
+@WebServlet("/서블릿 경로명") //서블릿 클래스를 해당 어플리케이션 이름으로 맵핑(주소창에 입력될 때 )
+public class 서블릿이름 extends HttpServlet {
+  
+}
 ```
 
