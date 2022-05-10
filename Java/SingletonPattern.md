@@ -29,9 +29,9 @@ public class Person {
   
   private Person() {} //private으로 무분별한 instance 생성을 막는다.
   
-  public Person getInstance() {
+  public static Person getInstance() {
     if(instance == null) {  //현재 생성된 인스턴스가 없을 경우
-      instance = this();    //인스턴스를 생성하여, static 변수에 담아준다.
+      instance = new Person();    //인스턴스를 생성하여, static 변수에 담아준다.
     }
     
     return instance;
