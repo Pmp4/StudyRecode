@@ -9,36 +9,16 @@
 ```java
 public class Singleton {
   private static Singleton instance;
-  
-  private Singleton() {}
-  
-  public static Singleton getInstance() {
-    if(instance == null) {
-       instance = new Singleton();
-    }
-    
-    return instance;
-  }
-}
-```
-
-```java
-public class Person {
-  private static Person instance; 
   //static 변수 - 클래스 차원에서 하나만 생성되어 모든 객체가 공유한다.
   
-  private Person() {} //private으로 무분별한 instance 생성을 막는다.
+  private Singleton() {}  //private으로 무분별한 instance 생성을 막는다.
   
-  public static Person getInstance() {
+  public static Singleton getInstance() {
     if(instance == null) {  //현재 생성된 인스턴스가 없을 경우
-      instance = new Person();    //인스턴스를 생성하여, static 변수에 담아준다.
+       instance = new Singleton();  //인스턴스를 생성하여, static 변수에 담아준다.
     }
     
     return instance;
-  }
-  
-  public void showInfo() {
-    System.out.println("Person 메서드");
   }
 }
 ```
