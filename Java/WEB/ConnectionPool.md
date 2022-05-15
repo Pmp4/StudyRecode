@@ -10,7 +10,7 @@ DataBase에 연결하기 위한 커넥션 객체는 새로 만들어질 때 많�
 
 ## 사용방법
 1. 직접 작성하여 사용
-2. 컨테이너나, WAS차원에서 제공하는 커넥션 풀을 사용
+2. 컨테이너나, WAS차원에서 제공하는 커넥션 풀을 사용 (DBCP)
 
 ### 직접 작성하여 사용
 ```java
@@ -151,3 +151,74 @@ public class ConnectionPoolMgr {
 	}
 }//class
 ```
+<br>
+
+### 컨테이너나, WAS차원에서 제공하는 커넥션 풀을 사용 (DBCP)
+#### DBCP(Database Connection Pool) 설정
+1. Tomcat의 lib 폴더 내 ```tomcat-dbcp.jar``` 파일 사용(자동)
+2. conf/server.xml 수정
+```xml
+<Context docBase="[실제 웹 프로젝트]" path="/[맵핑할 웹 프로젝트명]" reloadable="true" source="org.eclipse.jst.jee.server:[웹 프로젝트]">
+	<Resource 
+		auth="Container" 
+		driverClassName="oracle.jdbc.driver.OracleDriver" 
+		maxActive="20" 
+		maxWait="-1" 
+		name="jdbc/oracledb" 
+		username="[DBUser]"
+		password="[DBPwd]" 
+		type="javax.sql.DataSource" 
+		url="jdbc:oracle:thin:@aa:1521:xe"/>
+</Context>
+```
+
+#### ConnectionPoolMgr Class 생성
+```java
+public class ConnectionPoolMgr {
+	private DataSource ds;
+	//DataSource - 톰캣이 구현한 커넥션풀 객체
+	
+	public ConnectionPoolMgr() {
+		Context ctx;
+		
+		try {
+			ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/oracledb");
+			//JNDI(java Naming Directory Interface)
+			//XML과 같은 외부 자원을 통해 객체의 레퍼런스를 얻어오는 기법 이미 올라온 객체를 이름을 통해 검색해서 찾아내는 것
+			//lookup()이라는 메소드를 이용
+			
+			//java:comp/env의 하위 컨텍스트 중에 jdbc/oracledb 라는 항목의 리소스를 가져옴 이 리소스의 타입은 DataSource 타입이므로 형변환
+			
+			System.out.println("DataSource = " + ds);
+		} catch(NamingException e) {
+			System.out.println("DataSource 생성 실패");
+			e.printStackTrace();
+		}
+	}
+	
+	public Connection getConnection() throws SQLException {
+		Connection con = ds.getConnection();
+		System.out.println("DB연결 여부 con = " + con);
+		
+		return con;
+	}
+	
+	public void dbClose(ResultSet rs, PreparedStatement ps, Connection con) 
+			throws SQLException {
+		if(rs != null) rs.close(); 
+		if(ps != null) ps.close(); 
+		if(con != null) con.close(); 
+	}
+	
+	public void dbClose(PreparedStatement ps, Connection con) 
+			throws SQLException {
+		if(ps != null) ps.close(); 
+		if(con != null) con.close(); 
+	}
+}
+```
+- ```InitialContext``` 객체를 생성해서 ```(Context)ctx.lookup("java:/comp/env")``` “” 안에 기술된 이름을 lookup() 메서드를 이용해서 찾는 부분임
+- 다시 “java:/comp/env” 이름으로 찾아낸 ```Context``` 객체를 가지고 ```(DataSource)ctx.lookup(“jdbc/oracledb”);``` lookup() 메서드를 사용 해서 “jdbc/oracledb” 이름을 가지고 객체를 리턴 받아서 ```DataSource``` 객체 타입으로 형 변환됨
+- 어떠한객체든지찾을수있도록해야하기때문에실제할당된객체들 이 Object 타입으로 감싸져 있으므로 사용시 원하는 타입으로 형 변환 을 해야 함
+- ```DataSource``` 객체의 getConnection() 메서드를 가지고 커넥션 객체를 얻어냄
