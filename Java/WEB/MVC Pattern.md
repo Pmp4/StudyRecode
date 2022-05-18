@@ -4,9 +4,9 @@
 - 단점 : 복잡해질수록 유지보수가 어렵다.
 
 
-Model2
 
 
+## MVC 사용방법 1
 
 ### Controller
 ```java
@@ -82,3 +82,7 @@ public class TravelExpert {
 </body>
 </html>
 ```
+
+위와 같은 방식으로 사용시 여러 요청에 맞게 Controller를 하나하나 만들어줘야하는 문제점이 있다.
+
+## MVC 사용
