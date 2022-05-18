@@ -1,4 +1,5 @@
 # Servlet 매핑
+Servlet의 요청을 Servlet의 이름이 아닌 다른 이름으로 요청을 받는 방법
 1. Annotation @WebServlet Mapping
 2. web.xml Mapping
 
