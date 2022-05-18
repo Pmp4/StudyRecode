@@ -5,7 +5,6 @@
 
 
 
-
 ## MVC 사용방법 1
 
 ### Controller
@@ -85,7 +84,6 @@ public class TravelExpert {
 
 위와 같은 방식으로 사용시 여러 요청에 맞게 Controller를 하나하나 만들어줘야하는 문제점이 있다.
 <br>
-<br>
 
 ## MVC 사용방법 2(하나의 컨트롤러에서 모든 요청을 처리)
 사용자가 어떠한 요청을 했는지 판단하기 위해서 ```Command Pattern```을 사용하게 된다.(보편적 사용)<br>
@@ -94,7 +92,6 @@ public class TravelExpert {
 
 > 예시 : http://localhost:9090/mymvc/tips/book.do<br>
 > ```/mymvc/tips/book.do``` 이 부분이 하나의 명령어가 된다.
-<br>
 
 ### 1. ```CommandPro.properties``` 파일을 만들어 Controller를 매핑 (명령어와 명령어 처리 클래스)
 ```
