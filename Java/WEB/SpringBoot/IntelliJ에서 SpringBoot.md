@@ -119,12 +119,90 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 </dependency>
 ```
 기존 pom.xml에 위 종속성관련 내용 추가
+</br>
 
 ## 직접 생성
+<img width="428" alt="스크린샷 2022-06-04 오후 7 33 53" src="https://user-images.githubusercontent.com/88151484/171995461-0ec1158b-496e-49c3-880c-2e6a12cb6877.png"></br>
 - com.[회사].[프로젝트명].configuration
-  - DBConfiguration.java
-  - MvcConfiguration.java
+  - DBConfiguration.java : Data Source 객체 생성(ConnectionPool), sqlSessionFactory 객체 생성(DB Connection과 sql 관련 모든 것)
+  - MvcConfiguration.java : FileUpload 관련
 
+- config.mybatis.mapper.oracle : mapper xml 디렉토리
+- webapp/WEB-INF/views : view 관련 Jsp
 
+### DBConfiguration
+```java
+@Configuration
+@PropertySource("classpath:/application.properties")
+@EnableTransactionManagement
+public class DBConfiguration {
+
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	@Bean
+	@ConfigurationProperties(prefix = "spring.datasource.hikari")
+	public HikariConfig hikariConfig() {
+		return new HikariConfig();
+	}
+
+	@Bean
+	public DataSource dataSource() {
+		return new HikariDataSource(hikariConfig());
+	}
+
+	@Bean
+	public SqlSessionFactory sqlSessionFactory() throws Exception {
+		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+		factoryBean.setDataSource(dataSource());
+		factoryBean.setMapperLocations(applicationContext.getResources("classpath*:/config/mybatis/mapper/oracle/*.xml"));
+		factoryBean.setTypeAliasesPackage("com.[회사].[프로젝트이름]");
+		factoryBean.setConfiguration(mybatisConfg());
+		return factoryBean.getObject();
+	}
+
+	@Bean
+	public SqlSessionTemplate sqlSession() throws Exception {
+		return new SqlSessionTemplate(sqlSessionFactory());
+	}
+
+	@Bean
+	@ConfigurationProperties(prefix = "mybatis.configuration")
+	public org.apache.ibatis.session.Configuration mybatisConfg() {
+		return new org.apache.ibatis.session.Configuration();
+	}
+
+	//tx:annotation-driven 설정-@Transactional를 선언하여 트랜잭션 처리를 할 수 있다.
+	@Bean
+	public PlatformTransactionManager txManager() throws Exception{
+		return new DataSourceTransactionManager(dataSource());
+	}
+}
+```
+### MvcConfiguration
+```java
+@Configuration
+public class MvcConfiguration implements WebMvcConfigurer{
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new LoginInterceptor())
+		.addPathPatterns("/shop/cart/*", "/shop/order/*","/member/memberEdit.do","/member/memberOut.do");
+		
+		registry.addInterceptor(new AdminLoginInterceptor())
+		.excludePathPatterns("/admin/login/adminLogin.do")
+		.addPathPatterns("/admin/*/*", "/admin/*");
+	}
+
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver 
+			= new CommonsMultipartResolver();
+		multipartResolver.setDefaultEncoding("UTF-8"); // 파일 인코딩 설정
+		multipartResolver.setMaxUploadSizePerFile(2 * 1024 * 1024); // 파일당 업로드 크기 제한 (2MB)
+		return multipartResolver;
+	}
+}
+```
 
 
