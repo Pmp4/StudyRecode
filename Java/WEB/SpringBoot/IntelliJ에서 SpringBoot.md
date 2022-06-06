@@ -119,6 +119,22 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 </dependency>
 ```
 기존 pom.xml에 위 종속성관련 내용 추가
+
+///추가 (```<bulid></build> 안에 추가```)
+```xml
+<!--IntelliJ에서의 mapper xml 위치 지정하기 위해 사용-->
+<resources>
+	<resource>
+		<directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+	</resource>
+</resources>
+```
+mapper.xml 위치를 DBConfiguration.java에서 지정해주고 eclipse에서는 mapper 위치를 알맞게 찾아갔는데 이상하게 IntelliJ에서는 계속 못찾았다. 그래서 열심히 구글링 해보니 해당 리소스를 bulid 태그 내 넣어주면 된다고한다..
+
+
 </br>
 
 ## 직접 생성
